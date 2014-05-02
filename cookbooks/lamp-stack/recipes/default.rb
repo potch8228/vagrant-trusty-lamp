@@ -15,12 +15,6 @@ package "apache2" do
     action :install
 end
 
-#service "apache2" do
-##    action [ :enable, :start ]
-#    action :nothing
-#    supports :restart => true
-#end
-
 %w{php5 php5-mysql php5-dev php5-curl}.each do |pkg|
     package pkg do
         action :install
@@ -50,28 +44,16 @@ end
     end
 end
 
-# service "mysql" do
-#     action :nothing
-#     supports :restart => true
-# end
-
 template "/etc/mysql/my.cnf" do
     owner "root"
     group "root"
     mode 0644
     not_if "cat /etc/mysql/my.cnf | grep character-set-server"
-#    notifies :restart, "service[mysql]", :immediately
 end
 
 execute "mysql_restart" do
     command "service mysql restart"
 end
-
-#service "apache2" do
-##    action [ :enable, :start ]
-#    action :nothing
-#    supports :restart => true
-#end
 
 template "/etc/apache2/apache2.conf" do
     owner "root"
@@ -80,20 +62,28 @@ template "/etc/apache2/apache2.conf" do
     not_if "/etc/apache2/apache2.conf | grep AllowOverride | grep All"
 end
 
+template "/etc/apache2/envvars" do
+    owner "root"
+    group "root"
+    mode 0644
+    not_if "/etc/apache2/envvars | grep vagrant"
+end
+
 execute "mod_rewrite" do
     command "a2enmod rewrite"
-#    notifies :restart, "service[apache2]", :immediately
 end
 
 execute "apache2_restart" do
     command "service apache2 restart"
 end
 
-directory '/var/www' do
+directory "/var/www" do
     recursive true
     action :delete
+    not_if "test -h /var/www"
 end
 
-link '/var/www' do
-    to '/vagrant'
+link "/var/www" do
+    to "/vagrant"
+    not_if "test -e /var/www"
 end
