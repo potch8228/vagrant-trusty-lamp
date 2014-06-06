@@ -26,17 +26,17 @@ execute "xdebug" do
     not_if "pecl list | grep xdebug"
 end
 
-script "install_xdebug" do
-    interpreter "bash"
-    user "root"
-    cwd  "/etc/php5/"
-    code <<-EOD
-    PHP_INI=php.ini
-    XDEBUG_PATH=`find / -name 'xdebug.so'`
-    echo "zend_extension = \"${XDEBUG_PATH}\"" | tee -a apache2/$PHP_INI cli/$PHP_INI
-    EOD
-    not_if "cat /etc/php5/apache2/php.ini | grep xdebug"
-end
+# script "install_xdebug" do
+#     interpreter "bash"
+#     user "root"
+#     cwd  "/etc/php5/"
+#     code <<-EOD
+#     PHP_INI=php.ini
+#     XDEBUG_PATH=`find / -name 'xdebug.so'`
+#     echo "zend_extension = \"${XDEBUG_PATH}\"" | tee -a apache2/$PHP_INI cli/$PHP_INI
+#     EOD
+#     not_if "cat /etc/php5/apache2/php.ini | grep xdebug"
+# end
 
 %w{mysql-server mysql-client}.each do |pkg|
     package pkg do
