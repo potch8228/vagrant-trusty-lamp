@@ -15,7 +15,7 @@ package "apache2" do
     action :install
 end
 
-%w{php5 php5-mysql php5-dev php5-curl phpunit php5-apcu}.each do |pkg|
+%w{php5 php5-mysql php5-dev php5-curl phpunit php5-apcu php5-memcached}.each do |pkg|
     package pkg do
         action :install
     end
