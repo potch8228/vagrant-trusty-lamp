@@ -15,7 +15,7 @@ package "apache2" do
     action :install
 end
 
-%w{php5 php5-mysql php5-dev php5-curl phpunit php5-apcu php5-memcached}.each do |pkg|
+%w{php5 php5-mysql php5-dev php5-curl phpunit php5-apcu php5-memcached php5-mcrypt}.each do |pkg|
     package pkg do
         action :install
     end
@@ -67,6 +67,10 @@ template "/etc/apache2/envvars" do
     group "root"
     mode 0644
     not_if "/etc/apache2/envvars | grep vagrant"
+end
+
+execute "php5enmod mcrypt" do
+    action :run
 end
 
 execute "mod_rewrite" do
