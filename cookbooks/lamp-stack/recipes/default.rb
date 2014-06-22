@@ -26,6 +26,17 @@ execute "xdebug" do
     not_if "pecl list | grep xdebug"
 end
 
+script "install_php_cli_apc" do
+    interpreter "bash"
+    user "root"
+    cwd  "/etc/php5/mods-available/"
+    code <<-EOD
+    APC_INI=apcu.ini
+    echo "apc.enable_cli = 1" | tee -a $APC_INI
+    EOD
+    not_if "cat /etc/php5/mods-avaliable/apcu.ini | grep apc.enable_cli"
+end
+
 # script "install_xdebug" do
 #     interpreter "bash"
 #     user "root"
