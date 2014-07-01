@@ -88,6 +88,14 @@ execute "mod_rewrite" do
     command "a2enmod rewrite"
 end
 
+execute "mod_ssl" do
+    command "a2enmod ssl"
+end
+
+execute "a2ensite default-ssl" do
+    command "a2ensite default-ssl"
+end
+
 execute "apache2_restart" do
     command "service apache2 restart"
 end
